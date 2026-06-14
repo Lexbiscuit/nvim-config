@@ -20,6 +20,7 @@ opt.tabstop = 4
 opt.backspace = { "start", "eol", "indent" }
 opt.path:append({ "**" })
 opt.cursorline = true
+opt.colorcolumn = "80"
 
 -- Add asterisks in block comments
 opt.formatoptions:append({ "r" })
