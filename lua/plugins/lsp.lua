@@ -9,26 +9,21 @@ return {
 	},
 	{
 		"neovim/nvim-lspconfig",
-		config = function()
-			local lspconfig = require("lspconfig")
-
-			-- Connect Neovim to LLVM's clangd language server
-			lspconfig.clangd.setup({
-				cmd = {
-					"/opt/homebrew/opt/llvm/bin/clangd",
-					"--background-index", -- Index code patterns in background
-					"--clang-tidy", -- Enable linter diagnostics
-					"--completion-style=detailed",
-				},
-			})
-
-			lspconfig.gopls.setup({})
-		end,
 		opts = {
 			servers = {
 				---@type vim.lsp.Config
 				pyrefly = {},
 				sonarlint_language_server = {},
+				clangd = {
+					cmd = {
+						"/opt/homebrew/opt/llvm/bin/clangd",
+						"--background-index", -- Index code patterns in background
+						"--clang-tidy", -- Enable linter diagnostics
+						"--completion-style=detailed",
+					},
+				},
+				gopls = {},
+				vtsls = {},
 			},
 		},
 	},
@@ -37,13 +32,15 @@ return {
 		dependencies = { "kevinhwang91/promise-async" },
 		config = function()
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			local lspconfig = require("lspconfig")
+
 			capabilities.textDocument.foldingRange = {
 				dynamicRegistration = false,
 				lineFoldingOnly = true,
 			}
 			local language_servers = vim.lsp.get_clients() -- or list servers manually like {'gopls', 'clangd'}
 			for _, ls in ipairs(language_servers) do
-				require("lspconfig")[ls].setup({
+				lspconfig[ls].setup({
 					capabilities = capabilities,
 					-- you can add other fields for setting up lsp server in this table
 				})
@@ -77,12 +74,6 @@ return {
 						extension_path .. "/analyzers/sonarxml.jar",
 					},
 				},
-				-- csharp = {
-				-- 	enabled = true,
-				-- 	omnisharpDirectory = extension_path .. "/omnisharp",
-				-- 	csharpOssPath = extension_path .. "/analyzers/sonarcsharp.jar",
-				-- 	csharpEnterprisePath = extension_path .. "/analyzers/csharpenterprise.jar",
-				-- },
 			})
 		end,
 	},

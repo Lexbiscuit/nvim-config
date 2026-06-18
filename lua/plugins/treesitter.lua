@@ -12,6 +12,7 @@ return {
 				"javascript",
 				"typescript",
 				"tsx",
+				"sonarlint-language-server",
 			}
 			local treesitter = require("nvim-treesitter")
 			treesitter.setup()
