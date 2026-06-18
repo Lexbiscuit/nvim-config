@@ -9,6 +9,21 @@ return {
 	},
 	{
 		"neovim/nvim-lspconfig",
+		config = function()
+			local lspconfig = require("lspconfig")
+
+			-- Connect Neovim to LLVM's clangd language server
+			lspconfig.clangd.setup({
+				cmd = {
+					"/opt/homebrew/opt/llvm/bin/clangd",
+					"--background-index", -- Index code patterns in background
+					"--clang-tidy", -- Enable linter diagnostics
+					"--completion-style=detailed",
+				},
+			})
+
+			lspconfig.gopls.setup({})
+		end,
 		opts = {
 			servers = {
 				---@type vim.lsp.Config
